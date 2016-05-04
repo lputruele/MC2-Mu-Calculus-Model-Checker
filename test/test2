@@ -1,0 +1,24 @@
+vars
+  a;b;c;d
+
+rules
+  a -> b;
+  b -> c;
+  c -> d;
+  d -> !a;
+  !a -> !b;
+  !b -> !c;
+  !c -> !d;
+  !d -> a
+
+init
+  a
+
+check
+  (a & (b & c)),
+  %z.((a & c) | <>:z),
+  %z.(!b | <>:z),
+  $z.(d & []:z)
+
+
+

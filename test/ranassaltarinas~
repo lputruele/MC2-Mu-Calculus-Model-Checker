@@ -1,0 +1,62 @@
+int N = 7;
+int i = 0;
+string res = "vars \n";
+
+for (i = 1; i < N; i++){
+  res += "b" + (string)i + ";r" + (string)i + ";"
+}
+res  += "b" + (string)N + ";r" + (string)N + "\n"
+res += "rules \n"
+for (i = 1; i < N; i++){
+  res += "b" + (string)i + ",!b" + (string)(i+1) + ",!r" + (string)(i+1) + "->" + "!b" + (string)i + ",b" + (string)(i+1)+";";
+  res += "r" + (string)i + ",!r" + (string)(i+1) + ",!b" + (string)(i+1) + "->" + "!r" + (string)i + ",r" + (string)(i+1)+";";
+}
+for (i = 2; i <= N; i++){
+  res += "b" + (string)i + ",!b" + (string)(i-1) + ",!r" + (string)(i-1) + "->" + "!b" + (string)i + ",b" + (string)(i-1)+";";
+  res += "r" + (string)i + ",!r" + (string)(i-1) + ",!b" + (string)(i-1) + "->" + "!r" + (string)i + ",r" + (string)(i-1)+";";
+}
+for (i = 1; i < N-1; i++){
+  res += "b" + (string)i + ",r" + (string)(i+1) +",!b" + (string)(i+2) + ",!r" + (string)(i+2) + "->" + "!b" + (string)i + ",b" + (string)(i+2)+";";
+  res += "r" + (string)i + ",b" + (string)(i+1) +",!r" + (string)(i+2) + ",!b" + (string)(i+2) + "->" + "!r" + (string)i + ",r" + (string)(i+2)+";";
+}
+for (i = 3; i < N; i++){
+  res += "b" + (string)i + ",r" + (string)(i-1) +",!b" + (string)(i-2) + ",!r" + (string)(i-2) + "->" + "!b" +(string) i + ",b" + (string)(i-2)+";";
+  res += "r" + (string)i + ",b" + (string)(i-1) +",!r" + (string)(i-2) + ",!b" + (string)(i-2) + "->" + "!r" +(string) i + ",r" + (string)(i-2)+";";
+}
+res += "b" + (string)N + ",r" + (string)(N-1) +",!b" + (string)(N-2) + ",!r" + (string)(N-2) + "->" + "!b" + (string)N + ",b" + (string)(N-2);
+res += "r" + (string)N + ",b" + (string)(N-1) +",!r" + (string)(N-2) + ",!b" + (string)(N-2) + "->" + "!r" + (string)N + ",r" + (string)(N-2);
+
+res += "init \n"
+
+for (i = 1; i < N; i++){
+  if (i<N/2){
+    res += "b" + (string)i + ",";
+  }
+  if (i>(N/2+1)){
+    res += "r" + (string)i + ",";
+  }
+}
+res += "r" + (string)N;
+res += "check \n"
+res += "%z.("
+for (i = 1; i < N; i++){
+  if (i<N/2){
+    res += "(r" + (string)i + "&";
+  }
+  if (i>(N/2+1)){
+    res += "(b" + (string)i + "&";
+  }
+}
+res += "b" + (string)N;
+for (i = 1; i < N; i++){
+  res += ")";
+}
+res+= "| <>:z)"
+
+
+
+
+
+
+
+
