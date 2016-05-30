@@ -9,8 +9,8 @@ import Data.List
 ceval :: Comm -> Env -> OBDD AP
 ceval (Seq c0 c1) env = let (x,y) = (ceval c0 env,ceval c1 env) in OBDD.or[x,y] 
 ceval (Rule (e0,e1)) env = let xs = gentrans (filt env e0) [] in 
-							  if xs /= [] then 
-							    OBDD.or[OBDD.and[eeval x, eeval2 (fill x e1)]| x <- xs]
+							  if xs /= [[]] then 
+							    OBDD.or[OBDD.and[eeval (x++e0), eeval2 (fill (x++e0) e1)]| x <- xs]
 							  else 
                                 OBDD.and[eeval e0, eeval2 (fill e0 e1)]
 

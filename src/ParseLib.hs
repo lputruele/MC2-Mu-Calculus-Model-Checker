@@ -24,7 +24,7 @@ module ParseLib
    (Parser, item, papply, (+++), sat, many, many1, sepby, sepby1, chainl,
     chainl1, chainr, chainr1, ops, bracket, char, digit, lower, upper,
     letter, alphanum, string, ident, nat, int, spaces, comment, junk,
-    parse, token, natural, integer, symbol, identifier, module Control.Monad) where
+    parse, token, natural, integer, symbol, identifier, knownVar, module Control.Monad) where
 
 import Data.Char
 import Control.Monad
@@ -184,3 +184,7 @@ identifier ks      = token (do {x <- ident; if not (elem x ks) then return x
                                                                else mzero})
 
 ------------------------------------------------------------------------------
+--ADDED FUNCTIONS--
+knownVar :: [String] -> Parser String
+knownVar ks = token (do {x <- ident; if (elem x ks) then return x
+                                                    else mzero})

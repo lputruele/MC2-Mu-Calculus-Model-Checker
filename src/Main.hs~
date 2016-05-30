@@ -78,6 +78,6 @@ exec_from_file filename = do
 main :: IO ()
 main = do
           a <- getArgs
-          if (a == []) then putStr "Usage: ./Main.hs model.\n"
+          if (a == []) then putStr "Usage: ./Main.hs program.\n"
                        else exec_from_file (head a)
 

@@ -35,35 +35,37 @@ sshowList (x:xs) = show x ++ "," ++ sshowList xs
 
 --parser
 
-pForm :: Parser Form
-pForm = pVar +++ pProp +++ pNot +++ pBox +++ pDiamond +++ pGfp +++ pLfp +++ bracket (symbol "(") (pAnd +++ pOr) (symbol ")")
+pForm :: [String] -> Parser Form
+pForm xs = pVar xs +++ pProp xs +++ pNot xs +++ pBox xs +++ pDiamond xs +++ pGfp xs +++ pLfp xs +++ bracket (symbol "(") (pAnd xs +++ pOr xs) (symbol ")")
 
-pVar :: Parser Form
-pVar = do {symbol ":"; n <- identifier []; return (Var n)}
+pVar :: [String] -> Parser Form
+pVar xs = do {symbol ":"; n <- identifier []; return (Var n)}
 
-pProp :: Parser Form
-pProp = do {p <- identifier []; return (Prop p)}
+pProp :: [String] -> Parser Form
+pProp xs = do {p <- knownVar xs; return (Prop p)}
 
-pNot :: Parser Form
-pNot = do {symbol "!"; f <- pForm; return (Not f)}
+pNot :: [String] -> Parser Form
+pNot xs = do {symbol "!"; f <- pForm xs; return (Not f)}
 
-pAnd :: Parser Form
-pAnd = do {f0 <- pForm; symbol "&"; f1 <- pForm; return (And f0 f1)}
+pAnd :: [String] -> Parser Form
+pAnd xs = do {f0 <- pForm xs; symbol "&"; f1 <- pForm xs; return (And f0 f1)}
 
-pOr :: Parser Form
-pOr = do {f0 <- pForm; symbol "|"; f1 <- pForm; return (Or f0 f1)}
+pOr :: [String] -> Parser Form
+pOr xs = do {f0 <- pForm xs; symbol "|"; f1 <- pForm xs; return (Or f0 f1)}
 
-pBox :: Parser Form
-pBox = do {symbol "[]"; f <- pForm; return (Box f)}
+pBox :: [String] -> Parser Form
+pBox xs = do {symbol "[]"; f <- pForm xs; return (Box f)}
 
-pDiamond :: Parser Form
-pDiamond = do {symbol "<>"; f <- pForm; return (Diamond f)}
+pDiamond :: [String] -> Parser Form
+pDiamond xs = do {symbol "<>"; f <- pForm xs; return (Diamond f)}
 
-pGfp :: Parser Form
-pGfp = do {symbol "$"; n <- identifier[]; symbol "."; f <- pForm; return (Gfp n f)}
+pGfp :: [String] -> Parser Form
+pGfp xs = do {symbol "$"; n <- identifier[]; symbol "."; f <- pForm xs; return (Gfp n f)}
 
-pLfp :: Parser Form
-pLfp = do {symbol "%"; n <- identifier[]; symbol "."; f <- pForm; return (Lfp n f)}
+pLfp :: [String] -> Parser Form
+pLfp xs = do {symbol "%"; n <- identifier[]; symbol "."; f <- pForm xs; return (Lfp n f)}
 
-pForms :: Parser [Form]
-pForms = pForm `sepby1` symbol ","
+pForms :: [String] -> Parser [Form]
+pForms xs = (pForm xs) `sepby1` symbol ","
+
+
