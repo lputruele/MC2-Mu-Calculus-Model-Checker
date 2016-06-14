@@ -1,26 +1,40 @@
 vars
-  z1;z2;f1;f2;g1;g2;b1;b2
+  z1;z2;f1;f2;g1;g2;boat;go
 
 rules
-  z1,g1,!b1 -> !g1;
-  z2,g2,!b2 -> !g2;
-  g1,f1,!b1 -> !f1;
-  g2,f2,!b2 -> !f2;
+  z1,g1,!boat,!go -> !g1,go;
+  z2,g2,boat,!go -> !g2,go;
+  g1,f1,!boat,!go -> !f1,go;
+  g2,f2,boat,!go -> !f2,go;
 
-  b1,g1 -> !g1,!b1,g2,b2;
-  b2,g2 -> !g2,!b2,g1,b1;
-  b1,f1 -> !f1,!b1,f2,b2;
-  b2,f2 -> !f2,!b2,f1,b1;
-  b1,z1 -> !z1,!b1,z2,b2;
-  b2,z2 -> !z2,!b2,z1,b1;
-  b1 -> !b1,b2;
-  b2 -> !b2,b1
+  z1,f1,!g1,!boat,!go -> go;
+  z2,f2,!g2,boat,!go -> go;
+
+  z1,!f1,!g1,!boat,!go -> go;
+  z2,!f2,!g2,boat,!go -> go;
+
+  g1,!f1,!z1,!boat,!go -> go;
+  g2,!f2,!z2,boat,!go -> go;
+
+  f1,!z1,!g1,!boat,!go -> go;
+  f2,!z2,!g2,boat,!go -> go;
+
+  boat,g1,go -> !g1,!boat,g2,!go;
+  !boat,g2,go -> !g2,boat,g1,!go;
+  boat,f1,go -> !f1,!boat,f2,!go;
+  !boat,f2,go -> !f2,boat,f1,!go;
+  boat,z1,go -> !z1,!boat,z2,!go;
+  !boat,z2,go -> !z2,boat,z1,!go;
+
+  boat,go -> !boat,!go;
+  !boat,go -> boat,!go
 
 init
-  z1,f1,g1,b1
+  z1,f1,g1,boat,go
   
 check
-  %z.((f2 & (z2 & g2)) | <>:z)
+  %x.((f2 & (z2 & g2)) | <>:x),
+  $x.(!(((f1 & (z1 & g1)) & !boat) & <>(g1 & f1)) & []:x)
 
 
 
